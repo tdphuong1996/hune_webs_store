@@ -11,8 +11,20 @@ import 'repository/repository.dart';
 class ServiceRepository extends BaseRepository {
   final DioNetwork _dioNetwork = DioNetwork();
 
-  Future<Result<BaseResponseModel<T>>>requestApi<T>(RequestModel  model) {
-    return safeApiCall(_post<T>());
+  Future<Result<BaseResponseModel<T>>>requestApi<T>(String actionName,Map<String,dynamic> param ,{String serviceCode = ''}) {
+    Map<String ,dynamic> baseParam = {
+      'OS':'Android',
+      'HardwareIds':'',
+      'Take':20,
+    };
+    baseParam.addAll(param);
+    final map = {
+      'ClientName':'',
+      'ActionName':actionName,
+      'ServiceCode':serviceCode,
+      'Parameter':baseParam,
+    } ;
+    return safeApiCall(_post<T>(param: map));
   }
 
   Future<BaseResponseModel<T>> _post<T>({ String path = "/home/1.0", Map<String, dynamic>? param }) async {
